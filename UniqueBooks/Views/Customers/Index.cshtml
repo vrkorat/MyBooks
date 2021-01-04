@@ -1,0 +1,183 @@
+﻿@using UniqueBooks.Models
+@model IEnumerable<UniqueBooks.Models.Customer>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>CustomersIndex</h2>*@
+
+<h2>Customers</h2>
+<p>
+    @Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-primary" })
+</p>
+@if (!Model.Any())
+{
+    <p>We Don't have any customers</p>
+}
+else
+{
+    <table id="example" class="display table table-bordered table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th>Customers</th>
+                <th>Membershop type</th>
+                <th>Rentals</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                @*<th>columns5</th>
+                    <th>columns6</th>*@
+            </tr>
+        </thead>
+        <tbody>
+
+            @*@foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(customer.CustomerName, "Edit", "Customers", new {id = customer.Id}, null)</td>
+                        <td>@customer.MembershipType.MembershipName</td>
+                        <td>
+                            <button customer-id="@customer.Id" class="btn btn-danger js-delete">Delete</button>
+                        </td>
+
+                    </tr>
+                }*@
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Customers</th>
+                <th>Membershop type</th>
+                <th>Rentals</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                @*<th>columns5</th>
+                    <th>columns6</th>*@
+
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@section scripts{
+    @*CDN Way*@
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.js"></script>*@
+
+    @*  Locally Way  *@
+    <link rel="stylesheet" type="text/css" href="~/DataTables/datatables.min.css" />
+        <script type="text/javascript" src="~/DataTables/datatables.min.js"></script>
+        <script type="text/javascript" src="~/DataTables/dataTables.bootstrap.min.css"></script>
+
+    @*<link rel="stylesheet" type="text/css" href="~/Content/DataTables/media/css/dataTables.bootstrap.css" />
+        <script type="text/javascript" src="~/Scripts/DataTables/media/js/dataTables.bootstrap.js"></script>
+        <script type="text/javascript" src="~/Scripts/DataTables/media/js/jquery.dataTables.js"></script>*@
+
+    <script>
+        $(document).ready(function () {
+
+            //var data = [
+            //    {
+            //        "name":       "Tiger Nixon",
+            //        "position":   "System Architect",
+            //        "salary":     "$3,120",
+            //        "start_date": "2011/04/25",
+            //        "office":     "Edinburgh",
+            //        "extn":       "5421"
+            //    },
+            //    {
+            //        "name":       "Garrett Winters",
+            //        "position":   "Director",
+            //        "salary":     "$5,300",
+            //        "start_date": "2011/07/25",
+            //        "office":     "Edinburgh",
+            //        "extn":       "8422"
+            //    }
+            //];
+
+            var Dtable = $('#example').DataTable({
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                "ajax": {
+                    "url": "/api/customers",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {
+                        "data": "customerName",
+                        "autoWidth": true,
+                        "render": function (data, type, rowscustomer) {
+                            return "<a href='/customers/details/" + rowscustomer.id + "'>" +"<button class='btn btn-success'>"+ rowscustomer.customerName + "</button></a>";
+                        }
+                    },
+                    {
+                        "data": "membershipType.membershipName",
+                         "autoWidth": true
+                    },
+                    
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "render": function (data) {
+                            return "<button class='btn btn-primary active js-show-rented' renter-id=" + data + ">Show_Rentals</button>";
+                        }
+                    },
+                    {
+                        "data": "customerName",
+                        "autoWidth": true,
+                        "render": function (data, type, rowscustomer) {
+                            return "<a href='/customers/edit/" + rowscustomer.id + "'><button class='btn btn-warning'>Edit</button></a>";
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "render": function (data) {
+                            return "<button  class='btn btn-danger js-delete' customer-id=" + data + ">Delete</button>";
+
+                        }
+                    },
+
+                    //{ "data": "extn" },
+                    //{ "data": "start_date" }
+                    //{ "data": "salary" }
+                ]
+            });
+
+
+            $("#example").on("click", ".js-delete",
+                function () {
+                    var d_button = $(this);
+
+                    //if (confirm("Are You Sure You Want To Delete This Customer ?")) {
+                    window.bootbox.confirm("Are You Sure You Want To Delete This Customer ?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/customers/" + d_button.attr("customer-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        console.log("Success");
+                                        Dtable.row(d_button.parents("tr")).remove().draw();
+                                        //to remove the error in deletion
+                                        //d_button.parents("tr").remove();
+                                    }
+                                });
+                            }
+
+                        });
+                    //}
+
+                });
+
+
+            $("#example").on("click", ".js-show-rented", function() {
+                var r_button = $(this);
+                var id = r_button.attr("renter-id");
+                var url = '@Url.Action("ShowRentals", "Rentals", new { id =  "id"})';
+                window.location.href = url.replace('id', id);
+            });
+
+        });
+    </script>
+}

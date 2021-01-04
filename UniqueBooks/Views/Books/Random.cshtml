@@ -1,0 +1,46 @@
+﻿@*@using UniqueBooks.Models*@
+
+@model UniqueBooks.ViewModels.RandomBookViewModel
+
+@{
+    ViewBag.Title = "Random";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*1.(ViewDataDictionary["KeyName"]) way of using data passed by controller*@
+@*<h2>@( ((Book)ViewData["RandomBook"]).PublishDate.ToString("MMMM dd,yyyy") )</h2>*@
+@*-------------------------------------------------------------------------------*@
+
+@*2.(ViewBag.PropertyName)way of using data passed by controller*@
+@*<h2>@( ((Book)ViewBag.RandomBook).BookName )</h2>*@
+@*---------------------------------------------------------------------------------------*@
+
+@*3.(View method parameter)way of using data passed by controller*@
+
+@{
+    var className = Model.Customers.Count > 1 ? "popular" : null;
+}
+
+@*<h2>@Model.Book.Id</h2>*@
+<h2 class="@className">@Model.Book.BookName</h2>
+@*<h2>@Model.Book.AuthorName</h2>*@
+@*<h2>@Model.Book.PublisherName</h2>*@
+@*<h2>@Model.Book.PublishDate.ToString("MMMM dd,yyyy")</h2>*@
+
+@if (Model.Customers.Count == 0)
+{
+    <text>NoOne Has Rented this Book before.</text>
+}
+else
+{
+    <ul>
+        @foreach (var customer in Model.Customers)
+        {
+            <li>@customer.CustomerName</li>
+        }
+    </ul>
+}
+
+@*------------------------------------------------------------------------------------*@
+

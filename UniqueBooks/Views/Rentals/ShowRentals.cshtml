@@ -1,0 +1,94 @@
+﻿@model IEnumerable<UniqueBooks.Models.Rental>
+
+@{
+    ViewBag.Title = "title";
+}
+
+
+
+@if (!Model.Any())
+{
+    <h2>Renter's Rentals</h2>
+    <p>Renter has no rentals</p>
+}
+else
+{
+    <h2>@Model.FirstOrDefault().Customer.CustomerName's Rentals</h2>
+    <table id="example" class="display table  table-bordered table-hover" style="width:100%">
+        <thead>
+            <tr>
+                <th>Book Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var rental in Model)
+            {
+
+                <tr>
+                    <td>
+                        @rental.Book.BookName
+                    </td>
+                    @if (@rental.DateReturned == null)
+                    {
+                        <td>
+                            <button rental-id="@rental.Id" class="btn btn-primary js-return">Return</button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            Returned on @rental.DateReturned.Value.Date.ToString("D")
+                        </td>
+                    }
+
+                </tr>
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Books Name</th>
+                <th>Status</th>
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@section scripts
+{
+    @*CDN Way*@
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootbox.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#example").DataTable({
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            });
+
+            $("#example").on("click", ".js-return",
+                function() {
+                    var r_button = $(this);
+                    bootbox.confirm("Are You Sure You Want To Return This Book?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/newRentals/" + r_button.attr("rental-id"),
+                                    method: "GET",
+                                    success: function() {
+                                        console.log("Success");
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        });
+                });
+
+        });
+
+    </script>
+
+}

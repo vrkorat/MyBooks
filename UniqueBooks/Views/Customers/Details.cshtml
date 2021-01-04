@@ -1,0 +1,16 @@
+﻿@model UniqueBooks.Models.Customer
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Details</h2>*@
+
+<h2>@Model.CustomerName</h2>
+<ul>
+    <li>Membership Type: @Model.MembershipType.MembershipName</li>
+    @if (Model.Birthdate.HasValue)
+    {
+            <li>Birthdate: @Model.Birthdate.Value.ToShortDateString()</li>
+    }
+</ul>

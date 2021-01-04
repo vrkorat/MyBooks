@@ -1,0 +1,162 @@
+﻿@model IEnumerable<UniqueBooks.Models.Book>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>BooksIndex</h2>*@
+
+<h2>Books</h2>
+<p>
+    @Html.ActionLink("New Book", "New", "Books", null, new { @class = "btn btn-primary" })
+</p>
+@if (!Model.Any())
+{
+    <p>We Don't have any books</p>
+}
+else
+{
+    <table id="books" class="table table-bordered table-hover ">
+        <thead>
+            <tr>
+                <th>Book Names</th>
+                <th>Genre</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                @*<th>columns4</th>
+                    <th>columns5</th>
+                    <th>columns6</th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(book.BookName, "Edit", "Books", new { id = book.Id }, null)</td>
+                        <td>@book.Genre.GenreName</td>
+                        <td><button book-id="@book.Id" class="btn btn-danger js-delete">Delete</button></td>
+                    </tr>
+                }*@
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Book Names</th>
+                <th>Genre</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                @*<th>columns4</th>
+                    <th>columns5</th>
+                    <th>columns6</th>*@
+            </tr>
+        </tfoot>
+    </table>
+}
+
+@section scripts
+{
+    @*CDN Way*@
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.css" />
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.20/datatables.min.js"></script>*@
+
+
+    @*  Locally Way  *@
+    <link rel="stylesheet" type="text/css" href="~/DataTables/datatables.min.css" />
+    <script type="text/javascript" src="~/DataTables/datatables.min.js"></script>
+    <script type="text/javascript" src="~/DataTables/dataTables.bootstrap.min.css"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            //var data = [
+            //    {
+            //        "name": "Tiger Nixon",
+            //        "position": "System Architect",
+            //        "salary": "$3,120",
+            //        "start_date": "2011/04/25",
+            //        "office": "Edinburgh",
+            //        "extn": "5421"
+            //    },
+            //    {
+            //        "name": "Garrett Winters",
+            //        "position": "Director",
+            //        "salary": "$5,300",
+            //        "start_date": "2011/07/25",
+            //        "office": "Edinburgh",
+            //        "extn": "8422"
+            //    }
+            //];
+            var Dtable = $('#books').DataTable({
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                //for displaing static data in 'var data'
+                //data: data,
+                //columns: [
+                //    { data: 'name' },
+                //    { data: 'position' },
+                //    { data: 'salary' },
+                //    { data: 'office' }
+                //]
+
+                "ajax": {
+                    "url": "/api/books",
+                    "dataSrc": ""
+                },
+                "columns": [
+                    {
+                        "data": "bookName",
+                        "autoWidth": true,
+                        "render": function (data, type, rowsbook) {
+                            return "<a href='/books/details/" + rowsbook.id + "'>" + rowsbook.bookName + "</a>";
+                        }
+                    },
+                    {
+                        "data": "genre.genreName",
+                        "autoWidth": true
+                    },
+                    {
+                        "data": "bookName",
+                        "autoWidth": true,
+                        "render": function (data, type, rowsbook) {
+                            return "<a href='/books/edit/" + rowsbook.id + "'><button class='btn btn-primary'>Edit</button></a>";
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "render": function (data) {
+                            return "<button  class='btn btn-danger js-delete' book-id=" + data + ">Delete</button>";
+
+                        }
+                    }
+                    //{ "data": "extn" },
+                    //{ "data": "start_date" },
+                    //{ "data": "salary" }
+                ]
+
+            });
+
+            $("#books").on("click",
+                ".js-delete",
+                function () {
+                    var d_button = $(this);
+                    window.bootbox.confirm("Are You Sure You Want To Delete This Customer ?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/books/" + d_button.attr("book-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        console.log("Success");
+                                        Dtable.row(d_button.parents("tr")).remove().draw();
+                                        //to remove the error in deletion
+                                        //d_button.parents("tr").remove();
+                                    }
+                                });
+                            }
+
+                        });
+                });
+
+        });
+    </script>
+}

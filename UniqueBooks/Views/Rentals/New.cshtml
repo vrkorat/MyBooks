@@ -1,0 +1,145 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "New Rental Form";
+}
+
+<h2>New Rental Form</h2>
+
+<form id="newRental">
+    <div class="form-group">
+        <label>Customer</label>
+        <div class="tt-container">
+            <input id="customer" name="customer" data-rule-validCustomer="ture" required type="text" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Book</label>
+        <div class="tt-container">
+            <input id="book" name="book" data-rule-atLeastOneBook="true"  type="text" value="" class="form-control" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <ul id="books" class="list-group"></ul>
+        </div>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</form>
+
+@section scripts{
+    <link rel="stylesheet" type="text/css" href="~/Content/typeahead.css"/>
+    <link rel="stylesheet" type="text/css" href="~/Content/toastr.css"/>
+    <script type="text/javascript" src="~/Scripts/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="~/Scripts/toastr.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function() {
+
+            var vm = {
+                bookIds: []
+            };
+
+            var customers = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('customerName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                //prefetch: '/Data/customers.json',
+                remote: {
+                    url: '/api/customers?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            var books = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('bookName'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                //prefetch: '/Data/books.json',
+                remote: {
+                    url: '/api/books?query=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#customer').typeahead({
+                    highlight: true
+                },
+                {
+                    name: 'customers',
+                    display: 'customerName',
+                    source: customers
+
+                }).on("typeahead:select", function(e, customer) {
+                    vm.customerId = customer.id;
+                    //console.log(customer.id);
+                });
+
+            $('#book').typeahead({
+                    highlight: true
+                },
+                {
+                    name: 'books',
+                    display: 'bookName',
+                    source: books
+
+                }).on("typeahead:select", function(e, book) {
+                    //vm.customerId = book.id;
+                    //console.log(book.id);
+                    $("#books").append("<li class = 'list-group-item'>" + book.bookName + "</li>");
+                    vm.bookIds.push(book.id);
+                    $("#book").typeahead("val", "");
+            });
+
+            $.validator.addMethod("validCustomer", function () {
+                    return vm.customerId && vm.customerId !== 0;
+                },
+                "Please Select Valid Customer.");
+
+            $.validator.addMethod("atLeastOneBook", function() {
+                    return vm.bookIds.length > 0;
+                },
+                "Please Select At Least One book.");
+
+           var validator = $("#newRental").validate({
+                submitHandler: function() {
+                    //e.preventDefault();
+                    console.log(vm);
+                    $.ajax({
+                        url: "/api/newRentals",
+                        method: "POST",
+                        data: vm
+                    }).done(function() {
+                        console.log("done");
+                        toastr.success("Rentals Successfully recorded.");
+                        
+                        //for restting each value of the variable and validator
+                        //after setting  up submit button
+                        $("#customer").typeahead("val", "");
+                        $("#book").typeahead("val", "");
+                        $("#books").empty();
+                        vm = { bookIds: [] }
+                        validator.resetForm();
+
+                    }).fail(function() {
+                        console.log("fail");
+                        toastr.error("The Books that you have selected some of that might not be available.");
+
+                        //for resetting each value of the variable and validator
+                        //after setting  up submit button
+                        $("#customer").typeahead("val", "");
+                        $("#book").typeahead("val", "");
+                        $("#books").empty();
+                        vm = { bookIds: [] }
+                        validator.resetForm();
+
+                    });
+
+                    return false;
+                }
+            });
+            //$('#newRental').submit(function(e) {
+
+            //});
+        })
+    </script>
+}

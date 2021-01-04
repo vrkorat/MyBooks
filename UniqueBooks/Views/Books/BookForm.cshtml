@@ -1,0 +1,61 @@
+﻿@model UniqueBooks.ViewModels.BookFormViewModel
+@{
+    ViewBag.Title = "BookForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Books"))
+{
+    @Html.ValidationSummary(true, "Please fix The following errors")
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.BookName)
+        @Html.TextBoxFor(m => m.Book.BookName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.BookName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.AuthorName)
+        @Html.TextBoxFor(m => m.Book.AuthorName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.AuthorName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.PublisherName)
+        @Html.TextBoxFor(m => m.Book.PublisherName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.PublisherName)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.PublishDate)
+        @Html.TextBoxFor(m => m.Book.PublishDate, "{0: dd MMMM yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.PublishDate)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.GenreId)
+        @Html.DropDownListFor(m => m.Book.GenreId, new SelectList(Model.Genres, "Id", "GenreName"), "Select Genre", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.GenreId)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Book.NumberInStock)
+        @Html.TextBoxFor(m => m.Book.NumberInStock, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Book.NumberInStock)
+    </div>
+    @Html.Hidden("Book.Id", (Model.Book != null) ? Model.Book.Id :0)
+    @Html.HiddenFor(m => m.Book.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}
+
+@*Same problem as Customer
+you should see the other validation by uncommenting this and provideing
+date as formate'1 jan 2000'*@
+@*@section scripts
+{
+    @Scripts.Render("~/bundles/jquery")
+}*@
+

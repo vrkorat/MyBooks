@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1028,
+    "customerName": "Mosh Hamedani",
+    "birthdate": "2000-01-01T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 1,
+    "membershipType": {
+      "id": 1,
+      "membershipName": "Pay as you go"
+    }
+  },
+  {
+    "id": 1029,
+    "customerName": "Rutwik Kikani",
+    "birthdate": "2000-01-01T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 1,
+    "membershipType": {
+      "id": 1,
+      "membershipName": "Pay as you go"
+    }
+  },
+  {
+    "id": 1030,
+    "customerName": "Vivek Korat",
+    "birthdate": "2000-01-01T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 1,
+    "membershipType": {
+      "id": 1,
+      "membershipName": "Pay as you go"
+    }
+  },
+  {
+    "id": 1031,
+    "customerName": "Mary Williams",
+    "birthdate": "2000-04-20T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 2,
+    "membershipType": {
+      "id": 2,
+      "membershipName": "Monthly"
+    }
+  },
+  {
+    "id": 1032,
+    "customerName": "John Smith",
+    "birthdate": "2000-04-20T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 1,
+    "membershipType": {
+      "id": 1,
+      "membershipName": "Pay as you go"
+    }
+  },
+  {
+    "id": 1033,
+    "customerName": "Zansi Kikani",
+    "birthdate": "2004-01-26T00:00:00",
+    "isSubscribedToNewsletter": true,
+    "membershipTypeId": 1,
+    "membershipType": {
+      "id": 1,
+      "membershipName": "Pay as you go"
+    }
+  }
+]

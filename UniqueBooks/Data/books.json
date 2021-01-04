@@ -1,0 +1,100 @@
+[
+  {
+    "id": 10,
+    "bookName": "Concepts Of Physics2",
+    "authorName": "H.C.Verma",
+    "publisherName": "Bharati Bhawan",
+    "publishDate": "2012-12-13T00:00:00",
+    "dateAdded": "2012-12-14T00:00:00",
+    "numberInStock": 5,
+    "genreId": 2,
+    "genre": {
+      "id": 2,
+      "genreName": "Textbook"
+    }
+  },
+  {
+    "id": 11,
+    "bookName": "Tales Of Mosh",
+    "authorName": "Mosh Hamedani",
+    "publisherName": "Mosh Publication",
+    "publishDate": "2010-10-10T00:00:00",
+    "dateAdded": "2019-11-14T17:49:23.34",
+    "numberInStock": 5,
+    "genreId": 1,
+    "genre": {
+      "id": 1,
+      "genreName": "Autobiography"
+    }
+  },
+  {
+    "id": 14,
+    "bookName": "Tales Of Moshs  2",
+    "authorName": "Mosh Hamedani",
+    "publisherName": "Mosh Publication",
+    "publishDate": "2010-10-10T00:00:00",
+    "dateAdded": "2019-11-17T20:39:17.183",
+    "numberInStock": 5,
+    "genreId": 1,
+    "genre": {
+      "id": 1,
+      "genreName": "Autobiography"
+    }
+  },
+  {
+    "id": 16,
+    "bookName": "Chemistry",
+    "authorName": "Sanjay Sharma",
+    "publisherName": "Sharma Publication",
+    "publishDate": "2000-04-20T00:00:00",
+    "dateAdded": "2019-11-17T20:42:39.087",
+    "numberInStock": 5,
+    "genreId": 2,
+    "genre": {
+      "id": 2,
+      "genreName": "Textbook"
+    }
+  },
+  {
+    "id": 17,
+    "bookName": "Child Far Away From Home",
+    "authorName": "Child's Parents",
+    "publisherName": "Parents Publication",
+    "publishDate": "2000-04-20T00:00:00",
+    "dateAdded": "2019-11-17T20:44:11.77",
+    "numberInStock": 5,
+    "genreId": 4,
+    "genre": {
+      "id": 4,
+      "genreName": "Fairytale"
+    }
+  },
+  {
+    "id": 18,
+    "bookName": "SpiderMan Multivese",
+    "authorName": "Marvel Publiction",
+    "publisherName": "Marvel Publication",
+    "publishDate": "1998-01-01T00:00:00",
+    "dateAdded": "2019-11-17T20:45:44.047",
+    "numberInStock": 5,
+    "genreId": 5,
+    "genre": {
+      "id": 5,
+      "genreName": "Others"
+    }
+  },
+  {
+    "id": 19,
+    "bookName": "Concepts Of Physics 1",
+    "authorName": "H.C.Verma",
+    "publisherName": "Bharati Bhawan",
+    "publishDate": "2000-04-20T00:00:00",
+    "dateAdded": "2019-11-17T21:10:29.407",
+    "numberInStock": 5,
+    "genreId": 2,
+    "genre": {
+      "id": 2,
+      "genreName": "Textbook"
+    }
+  }
+]

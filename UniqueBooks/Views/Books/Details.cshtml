@@ -1,0 +1,15 @@
+﻿@model UniqueBooks.Models.Book
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Details</h2>*@
+
+<h2>@Model.BookName</h2>
+<ul>
+    <li>Genre: @Model.Genre.GenreName</li>
+    <li>Author: @Model.AuthorName</li>
+    <li>PublishDate: @Model.PublishDate.ToLongDateString()</li>
+    <li>Date Added: @Model.DateAdded.ToLongDateString()</li>
+</ul>
